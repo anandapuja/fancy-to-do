@@ -5,4 +5,4 @@ const mainRoute = require('./routes');
 app.use(express.urlencoded({ extended: false }));
 app.use('/', mainRoute);
 
-app.listen(3000, () => console.log('server idup'));
+app.listen(3000, () => console.log('listening port : 3000'));
