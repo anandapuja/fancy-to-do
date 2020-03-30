@@ -5,8 +5,13 @@ class TodoController {
     static getTodosData(req,res){
         Todo.findAll()
         .then( data => {
-            res.status(200);
-            res.json({ data });
+            if( data.length > 0 ){
+                res.status(200);
+                res.json({ data });
+            } else {
+                res.status(400);
+                res.json({ msg: 'Error not found' });
+            }
         }).catch( err => {
             res.status(500);
         })
@@ -19,6 +24,7 @@ class TodoController {
             status: req.body.status,
             due_date: req.body.due_date
         }).then( data => {
+            console.log('data masuk then')
             if( data ){
                 res.status(201);
                 res.json( data );
@@ -27,8 +33,13 @@ class TodoController {
                 res.json( data );
             }
         }).catch( err => {
-            res.status(500);
-            res.json({ msg: 'Internal server error' });
+            if( err.errors[0].message ){
+                res.status(400);
+                res.json({ msg: err.errors[0].message });
+            } else {
+                res.status(500);
+                res.json({ msg: 'Internal server error'});
+            }
         })
     }
     // GET A DATA
@@ -55,12 +66,11 @@ class TodoController {
             status: req.body.status,
             due_date: req.body.due_date
         }
-        let rowUpdate;
+        let updatedData;
         Todo.findByPk(Number(req.params.id))
         .then(data => {
-            if( data ){
-                console.log(data);
-                rowUpdate = {
+            if( data !== null ){
+                updatedData = {
                     title: data.title,
                     description: data.description,
                     status: data.status,
@@ -68,12 +78,16 @@ class TodoController {
                 }
                 return Todo.update(reqbody, { where: { id: req.params.id }})
             } else {
-                res.status(404);
-                res.json({ msg: 'Error not found' });
+                return 0;
             }
         }).then( data => {
-            res.status(200);
-            res.json({ data: rowUpdate });
+            if( data.length > 0 ){
+                res.status(200);
+                res.json({ data: updatedData });
+            } else {
+                res.status(404);
+                res.json({ msg: 'Error not found'});
+            }
         }).catch( err => {
             res.status(500);
             res.json({ msg: 'Internal server error' });
