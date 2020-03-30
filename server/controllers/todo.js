@@ -29,7 +29,7 @@ class TodoController {
                 res.json( data );
             } else {
                 res.status(400);
-                res.json( msg: err.errors[0].message );
+                res.json({ msg: err.errors[0].message });
             }
         }).catch( err => {
             if( err.errors[0].message ){
@@ -82,7 +82,7 @@ class TodoController {
         }).then( data => {
             if( data.length > 0 ){
                 res.status(200);
-                res.json({ data: updatedData });
+                res.json({ data: updatedData, status: 'success update' });
             } else {
                 res.status(404);
                 res.json({ msg: 'Error not found'});
@@ -107,7 +107,7 @@ class TodoController {
         }).then( data => {
             if( data === 1 ){
                 res.status(200);
-                res.json({ data: deletedData });
+                res.json({ data: deletedData, status: 'success delete' });
             } else {
                 res.status(404);
                 res.json({ msg: 'Error not found' });
