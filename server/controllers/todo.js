@@ -51,11 +51,8 @@ class TodoController {
             status: req.body.status,
             due_date: req.body.due_date
         }
-        Todo.findByPk({
-            where: {
-                id: req.params.id
-            }
-        }).then(data => {
+        Todo.findByPk(Number(req.params.id))
+        .then(data => {
             if( data ){
                 return Todo.update(reqbody, { where: { id: req.params.id }})
             } else {
