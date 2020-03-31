@@ -3,7 +3,11 @@ const { Todo } = require('../models');
 class TodoController {
     // GET ALL DATA
     static getTodosData(req,res){
-        Todo.findAll()
+        Todo.findAll({
+            where: {
+                UserId: req.userId
+            }
+        })
         .then( data => {
             if( data.length > 0 ){
                 res.status(200);
@@ -40,9 +44,10 @@ class TodoController {
     }
     // GET A DATA
     static getTodoData(req,res){
+        console.log('MASUK GET DATA')
         Todo.findByPk(Number(req.params.id))
         .then( data => {
-            if( data.id === Number(req.userId) ){
+            if( data ){
                 res.status(200).json({ data });
             } else {
                 res.status(404).json({ msg: 'Error not found' });
@@ -53,6 +58,7 @@ class TodoController {
     }
     // UPDATE DATA
     static putData(req,res){
+        console.log('MASUK PUT DATA')
         const reqbody = {
             title: req.body.title,
             description: req.body.description,
@@ -86,6 +92,7 @@ class TodoController {
     }
     // DELETE DATA
     static deleteData(req,res){
+        console.log('MASUK DELETE DATA')
         let deletedData;
         Todo.findByPk(Number(req.params.id))
         .then( data => {
