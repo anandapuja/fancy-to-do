@@ -8,24 +8,24 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
-        notNull: true,
         notEmpty: true,
         isEmail: true
       }
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
-        notNull: true,
         notEmpty: true
       }
     }
-  })
+  }, { sequelize })
 
   User.associate = function(models) {
     // associations can be defined here
-    User.hasMany(models.Todo);
+    // User.hasMany(models.Todo);
   };
   return User;
 };
