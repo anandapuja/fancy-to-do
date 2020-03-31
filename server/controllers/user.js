@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const jwt = require('jsonwebtoken');
 
 class UserController {
     static register(req,res){
@@ -6,11 +7,14 @@ class UserController {
             email: req.body.email,
             password: req.body.password
         }
-        console.log(newUser)
         User.create(newUser)
         .then( data => {
-            console.log(data)
-            res.status(200).json({ data });
+            res.status(200).json({ 
+                token: jwt.sign({
+                    userId: data.id,
+                    userEmail: data.email
+                }, 'cumakamiyangtahu')
+             });
         }).catch( err => {
             res.status(400).json({ message: 'Error not found' });
         })

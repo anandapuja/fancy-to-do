@@ -11,9 +11,13 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Email address already in use!'
+      },
       validate: {
         notEmpty: true,
-        isEmail: true
+        isEmail: true,
       }
     },
     password: {
@@ -26,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate(model, options) {
-        console.log('masuk hook')
         model.password = hashPass(model.password);
       }
     }, sequelize
