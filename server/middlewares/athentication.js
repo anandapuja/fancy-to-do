@@ -2,14 +2,14 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const authentication = (req,res,next) => {
+    const { token } = req.headers;
     try {
-        if(!req.headers.token){
-            throw new Error()
+        if(!token){
+            throw new Error();
         } else {
-            const decoded = jwt.verify(req.headers.token, process.env.SECRET);
+            const decoded = jwt.verify(token, process.env.SECRET);
             req.userId = decoded.userId;
             next();
-            // req.userId = decoded.;
         }
     } catch(e) {
         console.log(e);
