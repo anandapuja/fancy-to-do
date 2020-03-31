@@ -1,4 +1,6 @@
 'use strict';
+const hashPass = require('../helpers/bcrypt').hashPassword;
+
 module.exports = (sequelize, DataTypes) => {
   const Sequelize = sequelize.Sequelize;
   const Model = Sequelize.Model;
@@ -21,7 +23,14 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true
       }
     }
-  }, { sequelize })
+  }, {
+    hooks: {
+      beforeCreate(model, options) {
+        console.log('masuk hook')
+        model.password = hashPass(model.password);
+      }
+    }, sequelize
+  })
 
   User.associate = function(models) {
     // associations can be defined here
