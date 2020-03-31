@@ -1,5 +1,6 @@
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
+const checkPass = require('../helpers/bcrypt').checkPassword;
 
 class UserController {
     static register(req,res){
@@ -20,7 +21,28 @@ class UserController {
         })
     }
     static login(req,res){
-
+        User.findOne({
+            where: {
+                email: req.body.email
+            }
+        }).then( data => {
+            if(data){
+                if(checkPass(req.params.password, data.password)){
+                    res.status(200).json({ 
+                        token: jwt.sign({
+                            userId: data.id,
+                            userEmail: data.email
+                        }, 'cumakamiyangtahu')
+                     });
+                } else {
+                    res.status(400).json({ message: 'email / password invalid' });
+                }
+            } else {
+                res.status(400).json({ message: 'email / password invalid' });
+            }
+        }).catch( err => {
+            res.status(500).json({ message: 'Internal server error' });
+        })
     }
 }
 

@@ -6,8 +6,8 @@ function hashPassword(password){
     return hash;
 };
 
-function checkPassword(){
-
+function checkPassword(password, hashed){
+    return bcrypt.compareSync(password, hashed); // true
 };
 
 module.exports = {
