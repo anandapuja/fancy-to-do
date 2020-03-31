@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const checkPass = require('../helpers/bcrypt').checkPassword;
@@ -27,7 +28,7 @@ class UserController {
             }
         }).then( data => {
             if(data){
-                if(checkPass(req.params.password, data.password)){
+                if(checkPass(req.body.password, data.password)){
                     res.status(200).json({ 
                         token: jwt.sign({
                             userId: data.id,

@@ -22,22 +22,19 @@ class TodoController {
             title: req.body.title,
             description: req.body.description,
             status: req.body.status,
-            due_date: req.body.due_date
+            due_date: req.body.due_date,
+            UserId: req.userId
         }).then( data => {
             if( data ){
-                res.status(201);
-                res.json( data );
+                res.status(201).json( data );
             } else {
-                res.status(400);
-                res.json({ msg: err.errors[0].message });
+                res.status(400).json({ msg: err.errors[0].message });
             }
         }).catch( err => {
             if( err.errors[0].message ){
-                res.status(400);
-                res.json({ msg: err.errors[0].message });
+                res.status(400).json({ msg: err.errors[0].message });
             } else {
-                res.status(500);
-                res.json({ msg: 'Internal server error'});
+                res.status(500).json({ msg: 'Internal server error'});
             }
         })
     }
@@ -45,16 +42,13 @@ class TodoController {
     static getTodoData(req,res){
         Todo.findByPk(Number(req.params.id))
         .then( data => {
-            if( data ){
-                res.status(200);
-                res.json({ data });
+            if( data.id === Number(req.userId) ){
+                res.status(200).json({ data });
             } else {
-                res.status(404);
-                res.json({ msg: 'Error not found' });
+                res.status(404).json({ msg: 'Error not found' });
             }
         }).catch( err => {
-            res.status(500);
-            res.json({ msg: 'Internal server error'});
+            res.status(500).json({ msg: 'Internal server error'});
         })
     }
     // UPDATE DATA
@@ -63,7 +57,8 @@ class TodoController {
             title: req.body.title,
             description: req.body.description,
             status: req.body.status,
-            due_date: req.body.due_date
+            due_date: req.body.due_date,
+            UserId: req.userId
         }
         let updatedData;
         Todo.findByPk(Number(req.params.id))
@@ -81,15 +76,12 @@ class TodoController {
             }
         }).then( data => {
             if( data.length > 0 ){
-                res.status(200);
-                res.json({ data: updatedData, status: 'success update' });
+                res.status(200).json({ data: updatedData, status: 'success update' });
             } else {
-                res.status(404);
-                res.json({ msg: 'Error not found'});
+                res.status(404).json({ msg: 'Error not found'});
             }
         }).catch( err => {
-            res.status(500);
-            res.json({ msg: 'Internal server error' });
+            res.status(500).json({ msg: 'Internal server error' });
         })
     }
     // DELETE DATA
@@ -106,15 +98,12 @@ class TodoController {
             return Todo.destroy({ where: { id: req.params.id }})
         }).then( data => {
             if( data === 1 ){
-                res.status(200);
-                res.json({ data: deletedData, status: 'success delete' });
+                res.status(200).json({ data: deletedData, status: 'success delete' });
             } else {
-                res.status(404);
-                res.json({ msg: 'Error not found' });
+                res.status(404).json({ msg: 'Error not found' });
             }
         }).catch( err => {
-            res.status(500);
-            res.json({ msg: 'Error not found' });
+            res.status(500).json({ msg: 'Error not found' });
         })
     }
 }
