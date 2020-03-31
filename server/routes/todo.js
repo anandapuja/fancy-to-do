@@ -1,9 +1,10 @@
 const route = require('express').Router();
 const TodoController = require('../controllers/todo');
 const authorization = require('../middlewares/authorization');
+const checkexist = require('../middlewares/checkexist');
 
 // Main Route / View All Data
-route.get('/', TodoController.getTodosData);
+route.get('/', checkexist, TodoController.getTodosData);
 
 // View & Post Spesific Data 
 route.post('/', TodoController.postTodoData);
