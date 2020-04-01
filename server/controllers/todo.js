@@ -22,6 +22,8 @@ class TodoController {
     }
     // POST DATA
     static postTodoData(req,res){
+        console.log(req.body)
+        console.log(req.userId)
         Todo.create({
             title: req.body.title,
             description: req.body.description,
