@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy To Do</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <section class="d-flex justify-content-center bg-dark">
+        <section class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary">ADD</button>
+            <button type="button" class="btn btn-secondary">EDIT</button>
+            <button type="button" class="btn btn-secondary">DELETE</button>
+        </section>
+    </section>
+    <section class="row justify-content-center">
+            <div class="col"></div>
+            <div class="col-6">
+                <h1>ADD FORM</h1>
+                <form action="">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Title:</span>
+                        </div>
+                        <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Description</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <p>Status</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <label class="form-check-label" for="inlineRadio1">Done!</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                        <label class="form-check-label" for="inlineRadio2">Not yet!</label>
+                    </div><br><br>
+                    <p>Due Date</p>
+                    <input type="date"><br><br>
+                    <button type="submit" class="btn btn-info">ADD</button>
+                </form>
+            </div>
+            <div class="col"></div>
+    </section>
+    <section>
+        <table class="table">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Due Date</th>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+        </table>
+    </section>
+    <script src="main.js"></script>
+</body>
+</html>
