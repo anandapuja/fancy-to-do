@@ -7,7 +7,7 @@ const authentication = require('../middlewares/athentication');
 route.use('/todos', authentication, TodoRoute);
 route.use('/ongkir', authentication, OngkirRoute);
 route.post('/register', UserController.register);
-route.get('/login', UserController.login);
+route.post('/login', UserController.login);
 
 
 module.exports = route;

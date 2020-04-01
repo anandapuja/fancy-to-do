@@ -22,6 +22,7 @@ class UserController {
         })
     }
     static login(req,res){
+        console.log(req.body)
         User.findOne({
             where: {
                 email: req.body.email
@@ -42,7 +43,7 @@ class UserController {
                 res.status(400).json({ message: 'email / password invalid' });
             }
         }).catch( err => {
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({ message: 'internal server error' });
         })
     }
 }
