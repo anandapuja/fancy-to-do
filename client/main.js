@@ -1,11 +1,27 @@
 $(document).ready(() => {
 
-    $('#crud-nav').hide();
-    $('#reg-log-nav').show();
-    $('#section-add-form').hide();
-    $('#login-section').hide();
-    $('#register-section').hide();
-    $('#table-todos').hide();
+    if(localStorage.getItem('token')){
+        $('#crud-nav').show();
+        $('#reg-log-nav').hide();
+        $('#table-todos').hide();
+        $('#section-add-form').hide();
+        $('#login-section').hide();
+        $('#register-section').hide();
+        $('#section-edit-form').hide();
+    } else {
+        $('#crud-nav').hide();
+        $('#reg-log-nav').show();
+        $('#table-todos').hide();
+        $('#section-add-form').hide();
+        $('#login-section').hide();
+        $('#register-section').hide();
+        $('#section-edit-form').hide();
+    }
+
+    // $('#crud-nav').hide();
+    // $('#reg-log-nav').show();
+
+
     $('#message').hide();
 
     //  REGISTER BUTTON
@@ -19,7 +35,7 @@ $(document).ready(() => {
         event.preventDefault();
         const data = {
             email: $('#emailRegister').val(),
-            password: $('#emailRegister').val()
+            password: $('#passwordRegister').val()
         }
         $.ajax({
             type: 'POST',
@@ -108,6 +124,7 @@ $(document).ready(() => {
         $('#message').hide();
         $('#table-todos').show();
         $('#section-add-form').hide();
+        $('#section-login-form').hide();
         $.ajax({
             url: 'http://localhost:3000/todos',
             headers: {
@@ -144,7 +161,7 @@ $(document).ready(() => {
         $('#table-todos').hide();
     });
 
-    // ADD DATA SUBMIT
+    // ADD/EDIT DATA SUBMIT
     $('#addForm').submit(( event ) => {
         $('#message').hide();
         event.preventDefault();
@@ -154,7 +171,6 @@ $(document).ready(() => {
             status: $('#status').val(),
             due_date: $('#due-date').val()
         };
-
         $.ajax({
             type: 'POST',
             url: 'http://localhost:3000/todos',
@@ -164,7 +180,6 @@ $(document).ready(() => {
             }
         }).done( todo => {
             $('#message').show().append('Success ADD todo, view in dashboard');
-            console.log(todo);
         }).fail( err => {
             console.log(err);
         })
@@ -176,7 +191,7 @@ $(document).ready(() => {
         $('tr.todosRow').removeClass('selected');
         $(this).addClass('selected');
         selectedItem = $(this);
-    })
+    });
 
     //  DELETE A DATA
     $('#delete').click(function(event){
@@ -191,32 +206,73 @@ $(document).ready(() => {
                 }
             }).done(function(result){
                 $('#message').show().append('Success DELETE todo, view in dashboard');
-                console.log(result);
             }).fail(function(err){
-                console.log(err);
+                $('#message').show().append('Error DELETE todo');
             })
             $('.selected').remove();
         }
     })
 
-    //  EDIT DATA
+    let dataId;
+    //  EDIT BUTTON
     $('#edit').click(function(event){
         event.preventDefault();
         if(selectedItem){
             const todoId = selectedItem.attr('data-todoId');
-            $('#section-add-form').show();
+            $('#section-edit-form').show();
             $('#table-todos').hide();
-            // const todoId = selectedItem.attr('data-todoId');
-            // $.ajax({
-            //     type: 'PUT',
-            //     url: `http://localhost:3000/${todoId}`,
-            //     headers: {
-            //         token: localStorage.getItem('token');
-            //     }
-            // }).done(function(){
+            $.ajax({
+                type: 'GET',
+                url: `http://localhost:3000/todos/${todoId}`,
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            }).done( data => {
+                dataId = data.data.id;
+                const dataWillEdit = {
+                    title: data.data.title,
+                    description: data.data.description,
+                    status: data.data.status,
+                    due_date: data.data.due_date
+                };
 
-            // }).fail
-            // $('.selected').remove();
+                //  assignValue
+                $('#titleedit').val(dataWillEdit.title);
+                $('#descriptionedit').val(dataWillEdit.description);
+                if(dataWillEdit.status === true){
+                    $('.doneedit').attr('checked', true);
+                } else {
+                    $('.not-yetedit').attr('checked', true);
+                }
+                $('#due-dateedit').val(dataWillEdit.due_date);
+            }).fail( function(err){
+                $('#message').show().append('Error EDIT todo');
+                console.log(err);
+            })
         }
+    });
+
+    //  submitEdit
+    $('#editForm').submit(( event ) => {
+        console.log('masuk submit mainjs')
+        event.preventDefault();
+        const dataEdited = {
+            title: $('#titleedit').val(),
+            description: $('#descriptionedit').val(),
+            status: $('#statusedit').val(),
+            due_date: $('#due-dateedit').val()
+        };
+        $.ajax({
+            type: 'PUT',
+            url: `http://localhost:3000/todos/${dataId}`,
+            data: dataEdited,
+            headers: {
+                token: localStorage.getItem('token')
+            }
+        }).done( result => {
+            $('#message').show().append('Success EDIT todo, view in dashboard');
+        }).fail( err => {
+            $('#message').show().append('Eror EDIT todo');
+        });
     })
 });

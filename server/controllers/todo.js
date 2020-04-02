@@ -14,8 +14,8 @@ class TodoController {
                 res.status(200);
                 res.json({ data });
             } else {
-                res.status(400);
-                res.json({ msg: 'Error not found' });
+                res.status(200);
+                res.json({ msg: 'Data empty' });
             }
         }).catch( err => {
             res.status(500);
@@ -23,8 +23,6 @@ class TodoController {
     }
     // POST DATA
     static postTodoData(req,res){
-        console.log(req.body)
-        console.log(req.userId)
         Todo.create({
             title: req.body.title,
             description: req.body.description,
@@ -32,9 +30,7 @@ class TodoController {
             due_date: req.body.due_date,
             UserId: req.userId
         }).then( data => {
-            console.log('Data 1 >>>>>', data);
             if( data ){
-                console.log('Data 2 >>>>>', data);
                 res.status(201).json( data );
             } else {
                 res.status(400).json({ msg: err.errors[0].message });
@@ -49,7 +45,6 @@ class TodoController {
     }
     // GET A DATA
     static getTodoData(req,res){
-        console.log('MASUK GET DATA')
         Todo.findByPk(Number(req.params.id))
         .then( data => {
             if( data ){
@@ -74,6 +69,7 @@ class TodoController {
         let updatedData;
         Todo.findByPk(Number(req.params.id))
         .then(data => {
+            console.log('MASUK IF PUT DATA BERHASIL')
             if( data !== null ){
                 updatedData = {
                     title: data.title,
@@ -97,7 +93,6 @@ class TodoController {
     }
     // DELETE DATA
     static deleteData(req,res){
-        console.log('MASUK DELETE DATA')
         let deletedData;
         Todo.findByPk(Number(req.params.id))
         .then( data => {

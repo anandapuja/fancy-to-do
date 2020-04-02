@@ -25,11 +25,14 @@ class UserController {
         })
     }
     static login(req,res){
+        console.log(req.body, '<<DATA')
+
         User.findOne({
             where: {
                 email: req.body.email
             }
         }).then( data => {
+            console.log(data, '<<DATA dari SERVER')
             if(data){
                 if(checkPass(req.body.password, data.password)){
                     res.status(200).json({ 
@@ -39,6 +42,7 @@ class UserController {
                         }, process.env.SECRET)
                      });
                 } else {
+                    console.log(' MASUK ELS')
                     res.status(400).json({ message: 'email / password invalid 1' });
                 }
             } else {
