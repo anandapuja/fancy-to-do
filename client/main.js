@@ -1,5 +1,4 @@
 $(document).ready(() => {
-
     if(localStorage.getItem('token')){
         $('#crud-nav').show();
         $('#reg-log-nav').hide();
@@ -8,6 +7,7 @@ $(document).ready(() => {
         $('#login-section').hide();
         $('#register-section').hide();
         $('#section-edit-form').hide();
+        showAll();
     } else {
         $('#crud-nav').hide();
         $('#reg-log-nav').show();
@@ -17,6 +17,8 @@ $(document).ready(() => {
         $('#register-section').hide();
         $('#section-edit-form').hide();
     }
+});
+
 
     // $('#crud-nav').hide();
     // $('#reg-log-nav').show();
@@ -87,33 +89,13 @@ $(document).ready(() => {
                     $('#login-section').hide();
                     $('#crud-nav').show();
                     $('#reg-log-nav').hide();
-                    $('#table-todos').show();
-                    $.ajax({
-                        url: 'http://localhost:3000/todos',
-                        headers: {
-                            token: localStorage.getItem('token')
-                        }
-                    }).done( todos => {
-                        for( let i = 0; i < todos.data.length; i++ ){
-                            $('#table-todos')
-                            .append(`
-                                <tr class="todosRow" data-todoId="${todos.data[i].id}">
-                                    <td>${todos.data[i].title}</td>
-                                    <td>${todos.data[i].description}</td>
-                                    <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
-                                    <td>${todos.data[i].due_date}</td>
-                                </tr>
-                            `)
-                        }
-                    }).fail( err => {
-                        console.log(err);
-                    })
+                    showAll();
                 } else {
                     $('#login').show();
                     $('#crud-nav').hide();
                 }
             }).fail( err => {
-                $('#error-message').show().append(`${err.responseJSON.message}`);
+                // $('#message').show().append(`${err.responseJSON.message}`);
                 console.log(err);
             })
     });
@@ -147,11 +129,14 @@ $(document).ready(() => {
         })
     });
 
+    //LOGOUT
     $("#logout").click(() => {
         localStorage.removeItem('token');
         $("#reg-log-nav").show();
         $("#crud-nav").hide();
         $("#table-todos").hide();
+        $('#section-edit-form').hide();
+        $('#section-add-form').hide();
         console.log('user logout');
     });
 
@@ -191,6 +176,14 @@ $(document).ready(() => {
         $('tr.todosRow').removeClass('selected');
         $(this).addClass('selected');
         selectedItem = $(this);
+    });
+
+    // DESELECT A DATA
+    // let unselectedItem = null;
+    $(document.body).on('click', '.selected', function(){
+        $('tr.todosRow').removeClass('selected');
+        // $(this).addClass('selected');
+        // selectedItem = $(this);
     });
 
     //  DELETE A DATA
@@ -262,6 +255,7 @@ $(document).ready(() => {
             status: $('#statusedit').val(),
             due_date: $('#due-dateedit').val()
         };
+        console.log(dataEdited)
         $.ajax({
             type: 'PUT',
             url: `http://localhost:3000/todos/${dataId}`,
@@ -271,8 +265,37 @@ $(document).ready(() => {
             }
         }).done( result => {
             $('#message').show().append('Success EDIT todo, view in dashboard');
+            showAll();
         }).fail( err => {
             $('#message').show().append('Eror EDIT todo');
+            console.log(err);
         });
     })
-});
+
+
+function showAll(){
+    $('#table-todos').show();
+    $('#section-edit-form').hide();
+    $('#section-add-form').hide();
+
+    $.ajax({
+        url: 'http://localhost:3000/todos',
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    }).done( todos => {
+        for( let i = 0; i < todos.data.length; i++ ){
+            $('#table-todos')
+            .append(`
+                <tr class="todosRow" data-todoId="${todos.data[i].id}">
+                    <td>${todos.data[i].title}</td>
+                    <td>${todos.data[i].description}</td>
+                    <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
+                    <td>${todos.data[i].due_date}</td>
+                </tr>
+            `)
+        }
+    }).fail( err => {
+        console.log(err);
+    });
+}
