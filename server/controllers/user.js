@@ -11,18 +11,20 @@ class UserController {
         }
         User.create(newUser)
         .then( data => {
+            console.log(data.id)
             res.status(200).json({ 
+                id: data.id,
+                email: data.email,
                 token: jwt.sign({
                     userId: data.id,
                     userEmail: data.email
-                }, 'cumakamiyangtahu')
+                }, process.env.SECRET)
              });
         }).catch( err => {
             res.status(400).json({ message: 'Error not found' });
         })
     }
     static login(req,res){
-        console.log(req.body)
         User.findOne({
             where: {
                 email: req.body.email
@@ -34,13 +36,13 @@ class UserController {
                         token: jwt.sign({
                             userId: data.id,
                             userEmail: data.email
-                        }, 'cumakamiyangtahu')
+                        }, process.env.SECRET)
                      });
                 } else {
-                    res.status(400).json({ message: 'email / password invalid' });
+                    res.status(400).json({ message: 'email / password invalid 1' });
                 }
             } else {
-                res.status(400).json({ message: 'email / password invalid' });
+                res.status(400).json({ message: 'email / password invalid 2' });
             }
         }).catch( err => {
             res.status(500).json({ message: 'internal server error' });

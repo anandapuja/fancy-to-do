@@ -4,6 +4,7 @@ class TodoController {
     // GET ALL DATA
     static getTodosData(req,res){
         Todo.findAll({
+            order: [['id', 'desc']],
             where: {
                 UserId: req.userId
             }
@@ -31,7 +32,9 @@ class TodoController {
             due_date: req.body.due_date,
             UserId: req.userId
         }).then( data => {
+            console.log('Data 1 >>>>>', data);
             if( data ){
+                console.log('Data 2 >>>>>', data);
                 res.status(201).json( data );
             } else {
                 res.status(400).json({ msg: err.errors[0].message });
