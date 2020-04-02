@@ -6,59 +6,117 @@
     <title>Fancy To Do</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <section class="d-flex justify-content-center bg-dark">
-        <section class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-secondary">ADD</button>
-            <button type="button" class="btn btn-secondary">EDIT</button>
-            <button type="button" class="btn btn-secondary">DELETE</button>
+    <!-- IF NOT LOGIN -->
+    <section id="wrapLogNav" class="d-flex justify-content-center bg-dark">
+        <section id="reg-log-nav" class="btn-group">
+            <button id="register-button" class="btn btn-secondary">REGISTER</button>
+            <button id="login-button" class="btn btn-secondary">LOGIN</button>
         </section>
     </section>
+
+    <!-- IF LOGIN -->
+    <section id="wrapMainNav" class="d-flex justify-content-center bg-dark">
+        <section id="crud-nav" class="btn-group">
+            <button id="dashboard" class="btn btn-secondary">ALL TODOS</button>
+            <button id="add" class="btn btn-secondary">ADD</button>
+            <button id="edit" class="btn btn-secondary">EDIT</button>
+            <button id="delete" class="btn btn-secondary">DELETE</button>
+            <button id="logout" class="btn btn-secondary">LOGOUT</button>
+        </section>
+    </section>
+
+    <p id="message"></p>
+
     <section class="row justify-content-center">
             <div class="col"></div>
-            <div class="col-6">
-                <h1>ADD FORM</h1>
-                <form action="">
+
+            <!-- FORM LOGIN -->
+            <div id="login-section" class="col-6">
+                <h1>LOGIN FORM</h1>
+                <form id="loginForm">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon3">Title:</span>
+                            <span class="input-group-text">email :</span>
                         </div>
-                        <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                        <input type="text" class="form-control" id="email" name="email">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">password :</span>
+                        </div>
+                        <input type="text" class="form-control" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-info">Login</button>
+                </form>
+            </div>
+
+            <!-- FORM REGISTER -->
+            <div id="register-section" class="col-6">
+                <h1>REGISTER FORM</h1>
+                <form id="registerForm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">email :</span>
+                        </div>
+                        <input type="text" class="form-control" id="emailRegister" name="email">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">password :</span>
+                        </div>
+                        <input type="text" class="form-control" id="passwordRegister" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-info">Register</button>
+                </form>
+            </div>
+
+            <!-- ADD/ EDIT FORM -->
+            <div id="section-add-form" class="col-6">
+                <h1>ADD/ EDIT FORM</h1>
+                <form id="addForm">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="">Title:</span>
+                        </div>
+                        <input type="text" class="form-control" id="title">
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Description</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea class="form-control" id="description" rows="3"></textarea>
                     </div>
                     <p>Status</p>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <input class="form-check-input" type="radio" name="status" id="status" value="true">
                         <label class="form-check-label" for="inlineRadio1">Done!</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                        <input class="form-check-input" type="radio" name="status" id="status" value="false">
                         <label class="form-check-label" for="inlineRadio2">Not yet!</label>
                     </div><br><br>
                     <p>Due Date</p>
-                    <input type="date"><br><br>
+                    <input type="date" id="due-date" name="due_date"><br><br>
                     <button type="submit" class="btn btn-info">ADD</button>
                 </form>
             </div>
+
             <div class="col"></div>
     </section>
+
+    <!-- TABEL ALL TODOS -->
     <section>
-        <table class="table">
-            <tr>
+        <table id="table-todos" class="table">
+            <tr id="todosRow">
                 <th>Title</th>
                 <th>Description</th>
                 <th>Status</th>
                 <th>Due Date</th>
             </tr>
-            <tr>
-                <td></td>
-            </tr>
         </table>
     </section>
+        
     <script src="main.js"></script>
 </body>
 </html>

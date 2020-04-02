@@ -1,0 +1,8 @@
+.todosRow {
+    background: #ddd;
+    color: black;
+}
+.selected {
+    background-color: red;
+    color: white;
+}
