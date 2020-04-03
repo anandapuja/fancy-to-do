@@ -15,7 +15,7 @@ class TodoController {
                 res.json({ data });
             } else {
                 res.status(200);
-                res.json({ msg: 'Data empty' });
+                res.json({ data, msg: 'Data empty' });
             }
         }).catch( err => {
             res.status(500);
@@ -58,7 +58,6 @@ class TodoController {
     }
     // UPDATE DATA
     static putData(req,res){
-        console.log('MASUK PUT DATA')
         const reqbody = {
             title: req.body.title,
             description: req.body.description,
@@ -69,7 +68,6 @@ class TodoController {
         let updatedData;
         Todo.findByPk(Number(req.params.id))
         .then(data => {
-            console.log('MASUK IF PUT DATA BERHASIL')
             if( data !== null ){
                 updatedData = {
                     title: data.title,

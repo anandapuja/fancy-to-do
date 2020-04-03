@@ -6,35 +6,42 @@
     <title>Fancy To Do</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <meta name="google-signin-client_id" content="232345676551-plq6kmr47fk1gvurkrp0pnj8jivr3qvt.apps.googleusercontent.com"> -->
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
+
     <!-- IF NOT LOGIN -->
-    <section id="wrapLogNav" class="d-flex justify-content-center bg-dark">
-        <section id="reg-log-nav" class="btn-group">
+    <nav id="wrapLogNav" class="d-flex justify-content-center bg-dark sembunyi">
+        <section id="reg-log-nav" class="btn-group sembunyi">
             <button id="register-button" class="btn btn-secondary">REGISTER</button>
             <button id="login-button" class="btn btn-secondary">LOGIN</button>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
         </section>
-    </section>
+    </nav>
 
     <!-- IF LOGIN -->
-    <section id="wrapMainNav" class="d-flex justify-content-center bg-dark">
-        <section id="crud-nav" class="btn-group">
+    <nav id="wrapMainNav" class="d-flex justify-content-center bg-dark sembunyi">
+        <section id="crud-nav" class="btn-group sembunyi">
             <!-- <button id="dashboard" class="btn btn-secondary">ALL TODOS</button> -->
-            <button id="add" class="btn btn-secondary">ADD</button>
-            <button id="edit" class="btn btn-secondary">EDIT</button>
-            <button id="delete" class="btn btn-secondary">DELETE</button>
-            <button id="logout" class="btn btn-secondary">LOGOUT</button>
+            <button id="add" class="btn btn-secondary bg-dark border-0">ADD</button>
+            <button id="edit" class="btn btn-secondary bg-dark border-0" >EDIT</button>
+            <button id="delete" class="btn btn-secondary bg-dark border-0" >DELETE</button>
+            <button id="logout" class="btn btn-secondary bg-dark border-0">LOGOUT</button>
+            <button id="logout" class="btn btn-secondary bg-dark border-0" onclick="signOut();">GOOGLE SIGNOUT</button>
         </section>
-    </section>
+    </nav>
 
-    <p id="message"></p>
+    <div id="delete-edit-message" class="col-6 sembunyi">
 
+    </div>
+    
     <section class="row justify-content-center">
             <div class="col"></div>
-
+            
             <!-- FORM LOGIN -->
-            <div id="login-section" class="col-6">
+            <div id="login-section" class="col-6 sembunyi">
                 <h1>LOGIN FORM</h1>
                 <form id="loginForm">
                     <div class="input-group mb-3">
@@ -54,7 +61,7 @@
             </div>
 
             <!-- FORM REGISTER -->
-            <div id="register-section" class="col-6">
+            <div id="register-section" class="col-6 sembunyi">
                 <h1>REGISTER FORM</h1>
                 <form id="registerForm">
                     <div class="input-group mb-3">
@@ -74,7 +81,7 @@
             </div>
 
             <!-- ADD/FORM -->
-            <div id="section-add-form" class="col-6">
+            <div id="section-add-form" class="col-6 sembunyi">
                 <h1>ADD FORM</h1>
                 <form id="addForm">
                     <div class="input-group mb-3">
@@ -103,7 +110,7 @@
             </div>
 
             <!-- EDIT FORM -->
-            <div id="section-edit-form" class="col-6">
+            <div id="section-edit-form" class="col-6 sembunyi">
                 <h1>EDIT FORM</h1>
                 <form id="editForm">
                     <div class="input-group mb-3">
@@ -131,21 +138,27 @@
                 </form>
             </div>
 
+            <div id="todoTable" class="col-6 sembunyi">
+                <div class="alert alert-danger" role="alert">
+                    Do you want to take action? Simple click row and press EDIT or DELETE button above.
+                </div>
+                <h1>YOUR TO DO LIST</h1>
+                <div id="message-data" class="sembunyi"></div>
+                <table id="table-todos" class="table">
+                    <tr id="todosRow">
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                    </tr>
+                </table>
+            </div>
+
             <div class="col"></div>
     </section>
 
     <!-- TABEL ALL TODOS -->
-    <section>
-        <table id="table-todos" class="table">
-            <tr id="todosRow">
-                <th>Title</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Due Date</th>
-            </tr>
-        </table>
-    </section>
-        
+    <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
     <script src="main.js"></script>
 </body>
 </html>

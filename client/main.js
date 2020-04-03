@@ -1,30 +1,19 @@
 $(document).ready(() => {
     if(localStorage.getItem('token')){
+        hideAll();
         $('#crud-nav').show();
-        $('#reg-log-nav').hide();
-        $('#table-todos').hide();
-        $('#section-add-form').hide();
-        $('#login-section').hide();
-        $('#register-section').hide();
-        $('#section-edit-form').hide();
+        $('#todoTable').show();
+        $('#table-todos').show();
         showAll();
+        $(document.body).on('click', '.selected', function(){
+            $('tr.todosRow').removeClass('selected');
+        });
     } else {
-        $('#crud-nav').hide();
+        hideAll();
         $('#reg-log-nav').show();
-        $('#table-todos').hide();
-        $('#section-add-form').hide();
-        $('#login-section').hide();
-        $('#register-section').hide();
-        $('#section-edit-form').hide();
+        $('#register-section').show();
     }
 });
-
-
-    // $('#crud-nav').hide();
-    // $('#reg-log-nav').show();
-
-
-    $('#message').hide();
 
     //  REGISTER BUTTON
     $('#register-button').click(() => {
@@ -46,15 +35,15 @@ $(document).ready(() => {
         }).done( data => {
             const token = data.token;
             localStorage.setItem('token', token);
-            if(!localStorage){
-
-            } else {
+            if(!localStorage){}
+            else {
                 localStorage.setItem('token', data.token);
                 if(localStorage){
-                    $('#register-section').hide();
+                    hideAll();
                     $('#crud-nav').show();
-                    $('#reg-log-nav').hide();
-                    $('#table-todos').hide();
+                    $('#todoTable').show();
+                    $('#table-todos').show();
+                    showAll();
                 } else {
                     $('#login').show();
                     $('#crud-nav').hide();
@@ -85,10 +74,11 @@ $(document).ready(() => {
             data: data
             }).done( data => {
                 localStorage.setItem('token', data.token);
-                if(localStorage){
-                    $('#login-section').hide();
+                if(localStorage.getItem('token')){
+                    hideAll();
                     $('#crud-nav').show();
-                    $('#reg-log-nav').hide();
+                    $('#todoTable').show();
+                    $('#table-todos').show();
                     showAll();
                 } else {
                     $('#login').show();
@@ -100,55 +90,32 @@ $(document).ready(() => {
             })
     });
 
-    // SHOW ALL DATA
-    $('#dashboard').click(() => {
-        $("tr.todosRow").remove();
-        $('#message').hide();
-        $('#table-todos').show();
-        $('#section-add-form').hide();
-        $('#section-login-form').hide();
-        $.ajax({
-            url: 'http://localhost:3000/todos',
-            headers: {
-                token: localStorage.getItem('token')
-            }
-        }).done( todos => {
-            for( let i = 0; i < todos.data.length; i++ ){
-                $('#table-todos')
-                .append(`
-                    <tr class="todosRow" data-todoId=${todos.data[i].id}>
-                        <td>${todos.data[i].title}</td>
-                        <td>${todos.data[i].description}</td>
-                        <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
-                        <td>${todos.data[i].due_date}</td>
-                    </tr>
-                `)
-            }
-        }).fail( err => {
-            console.log(err);
-        })
-    });
-
     //LOGOUT
     $("#logout").click(() => {
+        hideAll();
         localStorage.removeItem('token');
-        $("#reg-log-nav").show();
-        $("#crud-nav").hide();
-        $("#table-todos").hide();
-        $('#section-edit-form').hide();
-        $('#section-add-form').hide();
+        $('#reg-log-nav').show();
+        $('#login-section').show();
         console.log('user logout');
     });
 
     // ADD BUTTON
     $('#add').click(() => {
+        hideAll();
+        $('#crud-nav').show();
         $('#section-add-form').show();
-        $('#table-todos').hide();
     });
 
-    // ADD/EDIT DATA SUBMIT
+    //  GOOGLE LOGOUT
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+        console.log('User signed out.');
+        });
+    }
+
+    // ADD DATA SUBMIT
     $('#addForm').submit(( event ) => {
-        $('#message').hide();
         event.preventDefault();
         const data = {
             title: $('#title').val(),
@@ -164,7 +131,12 @@ $(document).ready(() => {
                 token: localStorage.getItem('token')
             }
         }).done( todo => {
-            $('#message').show().append('Success ADD todo, view in dashboard');
+            hideAll();
+            $('#crud-nav').show();
+            $('#todoTable').show();
+            $('#table-todos').show();
+            showAll();
+            // $('#message').show().append('Success ADD todo, view in dashboard');
         }).fail( err => {
             console.log(err);
         })
@@ -176,14 +148,13 @@ $(document).ready(() => {
         $('tr.todosRow').removeClass('selected');
         $(this).addClass('selected');
         selectedItem = $(this);
+        $('#delete').removeAttr('disabled');
+        $('#edit').removeAttr('disabled');
     });
 
     // DESELECT A DATA
-    // let unselectedItem = null;
     $(document.body).on('click', '.selected', function(){
         $('tr.todosRow').removeClass('selected');
-        // $(this).addClass('selected');
-        // selectedItem = $(this);
     });
 
     //  DELETE A DATA
@@ -198,7 +169,11 @@ $(document).ready(() => {
                     token: localStorage.getItem('token')
                 }
             }).done(function(result){
-                $('#message').show().append('Success DELETE todo, view in dashboard');
+                hideAll();
+                $('#crud-nav').show();
+                $('#todoTable').show();
+                $('#table-todos').show();
+                showAll();
             }).fail(function(err){
                 $('#message').show().append('Error DELETE todo');
             })
@@ -210,10 +185,11 @@ $(document).ready(() => {
     //  EDIT BUTTON
     $('#edit').click(function(event){
         event.preventDefault();
+        hideAll();
+        $('#crud-nav').show();
         if(selectedItem){
             const todoId = selectedItem.attr('data-todoId');
             $('#section-edit-form').show();
-            $('#table-todos').hide();
             $.ajax({
                 type: 'GET',
                 url: `http://localhost:3000/todos/${todoId}`,
@@ -245,9 +221,8 @@ $(document).ready(() => {
         }
     });
 
-    //  submitEdit
+    //  EDIT SUBMIT
     $('#editForm').submit(( event ) => {
-        console.log('masuk submit mainjs')
         event.preventDefault();
         const dataEdited = {
             title: $('#titleedit').val(),
@@ -255,7 +230,6 @@ $(document).ready(() => {
             status: $('#statusedit').val(),
             due_date: $('#due-dateedit').val()
         };
-        console.log(dataEdited)
         $.ajax({
             type: 'PUT',
             url: `http://localhost:3000/todos/${dataId}`,
@@ -264,8 +238,13 @@ $(document).ready(() => {
                 token: localStorage.getItem('token')
             }
         }).done( result => {
-            $('#message').show().append('Success EDIT todo, view in dashboard');
+            hideAll();
+            $('#crud-nav').show();
+            $('#todoTable').show();
+            $('#table-todos').show();
             showAll();
+            // $('#message').show().append('Success EDIT todo, view in dashboard');
+            // showAll();
         }).fail( err => {
             $('#message').show().append('Eror EDIT todo');
             console.log(err);
@@ -274,28 +253,52 @@ $(document).ready(() => {
 
 
 function showAll(){
+    $('#delete').attr('disabled', true);
+    $('#edit').attr('disabled', true);
+    $('#delete-edit-message').show();
     $('#table-todos').show();
     $('#section-edit-form').hide();
     $('#section-add-form').hide();
-
+    $('#table-todos').empty()
     $.ajax({
         url: 'http://localhost:3000/todos',
         headers: {
             token: localStorage.getItem('token')
         }
     }).done( todos => {
-        for( let i = 0; i < todos.data.length; i++ ){
+        if( todos.data.length === 0 ){
+            $('#message-data').append(`<p>You haven't a data, please ADD YOUR TODO first</p>`);
+            $('#message-data').show();
+            $('#message-data').fadeOut(5000, ()=>{
+                $('#message-data').empty();
+            });
+        } else {
             $('#table-todos')
-            .append(`
-                <tr class="todosRow" data-todoId="${todos.data[i].id}">
-                    <td>${todos.data[i].title}</td>
-                    <td>${todos.data[i].description}</td>
-                    <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
-                    <td>${todos.data[i].due_date}</td>
+            .append(`        
+                <tr id="todosRow">
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
                 </tr>
-            `)
+            `);
+            for( let i = 0; i < todos.data.length; i++ ){
+                $('#table-todos')
+                .append(`
+                    <tr class="todosRow" data-todoId="${todos.data[i].id}">
+                        <td>${todos.data[i].title}</td>
+                        <td>${todos.data[i].description}</td>
+                        <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
+                        <td>${todos.data[i].due_date}</td>
+                    </tr>
+                `)
+            }
         }
     }).fail( err => {
         console.log(err);
     });
-}
+};
+
+function hideAll(){
+    $('.sembunyi').hide();
+};
