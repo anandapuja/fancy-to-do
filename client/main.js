@@ -29,14 +29,15 @@ function onSignIn(googleUser) {
             200: function(response){
                 console.log(response, '<<<<<< Berhasil dapat Token');
                 localStorage.setItem('token', response.token);
+                // successFormHandler()
+                hideAll();
+                $('#crud-nav').show();
+                $('#todoTable').show();
+                $('#table-todos').show();
+                showAll();
             }
         }
     });
-    hideAll();
-    $('#crud-nav').show();
-    $('#todoTable').show();
-    $('#table-todos').show();
-    showAll();
 }
 
 function googleLogOut(){
@@ -155,14 +156,6 @@ $('#add').click(() => {
     $('#delete').attr('disabled', true);
     $('#edit').attr('disabled', true);
 });
-
-//  GOOGLE LOGOUT
-function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-    console.log('User signed out.');
-    });
-}
 
 // ADD DATA SUBMIT
 $('#addForm').submit(( event ) => {
@@ -287,6 +280,13 @@ $('#editForm').submit(( event ) => {
 FUNCTION SECTION
 ***
 */
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    console.log('User signed out.');
+    });
+}
 
 function showAll(){
     $('#delete').attr('disabled', true);

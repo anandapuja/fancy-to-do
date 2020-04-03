@@ -6,3 +6,20 @@
     background-color: red;
     color: white;
 }
+img {
+    max-width: 600px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+header {
+    padding: 20px 0;
+}
+footer {
+    margin-top: 100px;
+    padding: 20px 0 10px 0;
+    background-color: #eee;
+}
+h1 {
+    color: #2E3192;
+}

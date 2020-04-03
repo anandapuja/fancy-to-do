@@ -9,15 +9,19 @@
     <meta name="google-signin-client_id" content="599874459495-r6ao4qcllhlnh0p9t9rn7n64gjuj13lq.apps.googleusercontent.com">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href="node_modules/sweetalert2/dist/sweetalert2.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="./img/favicon.ico">
 </head>
 <body>
-
+    <header>
+        <img src="./img/logo.png">
+    </header>
     <!-- IF NOT LOGIN -->
     <nav id="wrapLogNav" class="d-flex justify-content-center bg-dark sembunyi">
         <section id="reg-log-nav" class="btn-group sembunyi">
             <button id="register-button" class="btn btn-secondary">REGISTER</button>
             <button id="login-button" class="btn btn-secondary">LOGIN</button>
-            <div id="googleLogIn" class="g-signin2" data-onsuccess="onSignIn"></div>
+            <!-- <div id="googleLogIn" class="g-signin2" data-onsuccess="onSignIn"></div> -->
+            <!-- <button id="logout" onclick="googleLogOut();" class="btn btn-secondary bg-dark border-0">LOGOUT</button> -->
             <!-- <button id="googleLogOut" onclick="googleLogOut();" class="btn btn-secondary">LOGOUT</button> -->
         </section>
     </nav>
@@ -38,8 +42,8 @@
             <div class="col"></div>
             
             <!-- FORM LOGIN -->
-            <div id="login-section" class="col-6 sembunyi">
-                <h1>LOGIN FORM</h1>
+            <div id="login-section" class="mt-5 col-6 sembunyi">
+                <h1 class="mb-4">LOGIN HERE!</h1>
                 <form id="loginForm">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -54,12 +58,13 @@
                         <input type="password" class="form-control" id="password" name="password">
                     </div>
                     <button type="submit" class="btn btn-info">Login</button>
+                    <div id="googleLogIn" class="g-signin2 btn" data-onsuccess="onSignIn"></div>
                 </form>
             </div>
 
             <!-- FORM REGISTER -->
-            <div id="register-section" class="col-6 sembunyi">
-                <h1>REGISTER FORM</h1>
+            <div id="register-section" class="mt-5 col-6 sembunyi">
+                <h1 class="mb-4">REGISTER HERE!</h1>
                 <form id="registerForm">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -74,6 +79,7 @@
                         <input type="text" class="form-control" id="passwordRegister" name="password">
                     </div>
                     <button type="submit" class="btn btn-info">Register</button>
+                    <div id="googleLogIn" class="g-signin2 btn" data-onsuccess="onSignIn"></div>
                 </form>
             </div>
 
@@ -143,7 +149,7 @@
                 <div class="alert alert-danger" role="alert">
                     Want to take an action? Simple! CLICK ROW & press EDIT or DELETE button above.
                 </div>
-                <h1>YOUR TO DO LIST</h1>
+                <h1 class="text-center mb-4">YOUR TO DO LIST</h1>
                 <div id="message-data" class="col-6 sembunyi"></div>
                 <table id="table-todos" class="table">
                     <tr id="todosRow">
@@ -157,7 +163,18 @@
 
             <div class="col"></div>
     </section>
-
+    <footer>
+        <div class="text-center">
+            <p>Fancy To Do - created by Ananda Puja</p>
+            <p>This application using,
+                <a href="https://nodejs.org/en/" target="_blank">node,</a>
+                <a href="https://expressjs.com/" target="_blank">express,</a>
+                <a href="https://sequelize.org/" target="_blank">sequelize,</a>
+                <a href="https://jquery.com/" target="_blank">jQuery,</a>
+                <a href="https://developers.google.com/identity/sign-in/web/sign-in" target="_blank">googleSign,</a> and more ...
+            </p>
+        </div>
+    </footer>
     <!-- TABEL ALL TODOS -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="main.js"></script>

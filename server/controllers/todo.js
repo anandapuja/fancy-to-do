@@ -3,6 +3,7 @@ const { Todo } = require('../models');
 class TodoController {
     // GET ALL DATA
     static getTodosData(req,res){
+        console.log('>>>> CONTROLLER')
         Todo.findAll({
             order: [['id', 'desc']],
             where: {
@@ -17,7 +18,7 @@ class TodoController {
             }
         }).catch( err => {
             res.status(500).json({
-                msg: 'Internal Server Error'
+                msg: 'internal Server Error'
             });
         })
     }
