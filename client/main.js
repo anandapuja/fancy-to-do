@@ -1,3 +1,4 @@
+
 $(document).ready(() => {
     if(localStorage.getItem('token')){
         hideAll();
@@ -15,242 +16,277 @@ $(document).ready(() => {
     }
 });
 
-    //  REGISTER BUTTON
-    $('#register-button').click(() => {
-        $('#register-section').show();
-        $('#login-section').hide();
-    });
-
-    //  REGISTER SUBMIT
-    $('#registerForm').submit(( event ) => {
-        event.preventDefault();
-        const data = {
-            email: $('#emailRegister').val(),
-            password: $('#passwordRegister').val()
-        }
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:3000/register',
-            data
-        }).done( data => {
-            const token = data.token;
-            localStorage.setItem('token', token);
-            if(!localStorage){}
-            else {
-                localStorage.setItem('token', data.token);
-                if(localStorage){
-                    hideAll();
-                    $('#crud-nav').show();
-                    $('#todoTable').show();
-                    $('#table-todos').show();
-                    showAll();
-                } else {
-                    $('#login').show();
-                    $('#crud-nav').hide();
-                }
+function onSignIn(googleUser) {
+    console.log('user sign in via Google');
+    var id_token = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/googleSignIn',
+        data: {
+            token: id_token
+        },
+        statusCode: {
+            200: function(response){
+                console.log(response, '<<<<<< Berhasil dapat Token');
+                localStorage.setItem('token', response.token);
             }
-        }).fail((err) => {
-            $('message').show().append(`${err.responseJSON.message}`);
-            console.log(err);
-        })
-    });
-
-    // LOGIN BUTTON
-    $('#login-button').click(() => {
-        $('#login-section').show();
-        $('#register-section').hide();
-    });
-
-    // LOGIN SUBMIT
-    $('#loginForm').submit(function( event ){
-        event.preventDefault()
-        const data = {
-            email: $('#email').val(),
-            password: $('#password').val()
         }
-        $.ajax({
-            url: 'http://localhost:3000/login',
-            type: 'POST',
-            data: data
-            }).done( data => {
-                localStorage.setItem('token', data.token);
-                if(localStorage.getItem('token')){
-                    hideAll();
-                    $('#crud-nav').show();
-                    $('#todoTable').show();
-                    $('#table-todos').show();
-                    showAll();
-                } else {
-                    $('#login').show();
-                    $('#crud-nav').hide();
-                }
-            }).fail( err => {
-                // $('#message').show().append(`${err.responseJSON.message}`);
-                console.log(err);
-            })
     });
+    hideAll();
+    $('#crud-nav').show();
+    $('#todoTable').show();
+    $('#table-todos').show();
+    showAll();
+}
 
-    //LOGOUT
-    $("#logout").click(() => {
-        hideAll();
-        localStorage.removeItem('token');
-        $('#reg-log-nav').show();
-        $('#login-section').show();
-        console.log('user logout');
+function googleLogOut(){
+    const auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
     });
+    localStorage.removeItem('token');
+    $('#password').val('');
+    $('#email').val('');
+}
 
-    // ADD BUTTON
-    $('#add').click(() => {
-        hideAll();
-        $('#crud-nav').show();
-        $('#section-add-form').show();
-    });
+//  REGISTER BUTTON
+$('#register-button').click(() => {
+    $('#register-section').show();
+    $('#login-section').hide();
+});
 
-    //  GOOGLE LOGOUT
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-        console.log('User signed out.');
-        });
+//  REGISTER SUBMIT
+$('#registerForm').submit(( event ) => {
+    event.preventDefault();
+    const data = {
+        email: $('#emailRegister').val(),
+        password: $('#passwordRegister').val()
     }
-
-    // ADD DATA SUBMIT
-    $('#addForm').submit(( event ) => {
-        event.preventDefault();
-        const data = {
-            title: $('#title').val(),
-            description: $('#description').val(),
-            status: $('#status').val(),
-            due_date: $('#due-date').val()
-        };
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:3000/todos',
-            data,
-            headers: {
-                token: localStorage.getItem('token')
-            }
-        }).done( todo => {
-            hideAll();
-            $('#crud-nav').show();
-            $('#todoTable').show();
-            $('#table-todos').show();
-            showAll();
-            // $('#message').show().append('Success ADD todo, view in dashboard');
-        }).fail( err => {
-            console.log(err);
-        })
-    });
-
-    // SELECT A DATA
-    let selectedItem = null;
-    $(document.body).on('click', 'tr.todosRow', function(){
-        $('tr.todosRow').removeClass('selected');
-        $(this).addClass('selected');
-        selectedItem = $(this);
-        $('#delete').removeAttr('disabled');
-        $('#edit').removeAttr('disabled');
-    });
-
-    // DESELECT A DATA
-    $(document.body).on('click', '.selected', function(){
-        $('tr.todosRow').removeClass('selected');
-    });
-
-    //  DELETE A DATA
-    $('#delete').click(function(event){
-        event.preventDefault();
-        if(selectedItem){
-            const todoId = selectedItem.attr('data-todoId');
-            $.ajax({
-                type: 'DELETE',
-                url: `http://localhost:3000/todos/${todoId}`,
-                headers: {
-                    token: localStorage.getItem('token')
-                }
-            }).done(function(result){
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/register',
+        data
+    }).done( data => {
+        const token = data.token;
+        localStorage.setItem('token', token);
+        if(!localStorage){}
+        else {
+            localStorage.setItem('token', data.token);
+            if(localStorage){
                 hideAll();
                 $('#crud-nav').show();
                 $('#todoTable').show();
                 $('#table-todos').show();
                 showAll();
-            }).fail(function(err){
-                $('#message').show().append('Error DELETE todo');
-            })
-            $('.selected').remove();
+            } else {
+                $('#login').show();
+                $('#crud-nav').hide();
+            }
         }
+    }).fail((err) => {
+        messageShow(err.responseJSON.msg)
+        console.log(err);
     })
+});
 
-    let dataId;
-    //  EDIT BUTTON
-    $('#edit').click(function(event){
-        event.preventDefault();
-        hideAll();
-        $('#crud-nav').show();
-        if(selectedItem){
-            const todoId = selectedItem.attr('data-todoId');
-            $('#section-edit-form').show();
-            $.ajax({
-                type: 'GET',
-                url: `http://localhost:3000/todos/${todoId}`,
-                headers: {
-                    token: localStorage.getItem('token')
-                }
-            }).done( data => {
-                dataId = data.data.id;
-                const dataWillEdit = {
-                    title: data.data.title,
-                    description: data.data.description,
-                    status: data.data.status,
-                    due_date: data.data.due_date
-                };
+// LOGIN BUTTON
+$('#login-button').click(() => {
+    $('#login-section').show();
+    $('#register-section').hide();
+});
 
-                //  assignValue
-                $('#titleedit').val(dataWillEdit.title);
-                $('#descriptionedit').val(dataWillEdit.description);
-                if(dataWillEdit.status === true){
-                    $('.doneedit').attr('checked', true);
-                } else {
-                    $('.not-yetedit').attr('checked', true);
-                }
-                $('#due-dateedit').val(dataWillEdit.due_date);
-            }).fail( function(err){
-                $('#message').show().append('Error EDIT todo');
-                console.log(err);
-            })
+// LOGIN SUBMIT
+$('#loginForm').submit(function( event ){
+    event.preventDefault()
+    const data = {
+        email: $('#email').val(),
+        password: $('#password').val()
+    }
+    $.ajax({
+        url: 'http://localhost:3000/login',
+        type: 'POST',
+        data: data
+        }).done( data => {
+            localStorage.setItem('token', data.token);
+            if(localStorage.getItem('token')){
+                successFormHandler();
+            } else {
+                $('#login').show();
+                $('#crud-nav').hide();
+            }
+        }).fail( err => {
+            console.log(err);
         }
-    });
+    );
+});
 
-    //  EDIT SUBMIT
-    $('#editForm').submit(( event ) => {
-        event.preventDefault();
-        const dataEdited = {
-            title: $('#titleedit').val(),
-            description: $('#descriptionedit').val(),
-            status: $('#statusedit').val(),
-            due_date: $('#due-dateedit').val()
-        };
+//LOGOUT
+$("#logout").click(() => {
+    Swal.fire({
+        title: 'Are you sure?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout!'
+        })
+        .then((result) => {
+            if (result.value) {
+                Swal.fire(
+                'Logged out!',
+                'Please login back.',
+                'success'
+                )
+                hideAll();
+                localStorage.removeItem('token');
+                $('#reg-log-nav').show();
+                $('#login-section').show();
+                console.log('user logout');
+            }
+        }
+    );
+});
+
+// ADD BUTTON
+$('#add').click(() => {
+    hideAll();
+    $('#crud-nav').show();
+    $('#section-add-form').show();
+    $('#delete').attr('disabled', true);
+    $('#edit').attr('disabled', true);
+});
+
+//  GOOGLE LOGOUT
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    console.log('User signed out.');
+    });
+}
+
+// ADD DATA SUBMIT
+$('#addForm').submit(( event ) => {
+    event.preventDefault();
+    let statusValue;
+    statusValue = $("input[name='status']:checked").val();
+    const data = {
+        title: $('#title').val(),
+        description: $('#description').val(),
+        status: statusValue,
+        due_date: $('#due-date').val()
+    };
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/todos',
+        data,
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    }).done( todo => {
+        successFormHandler();
+    }).fail( err => {
+        catchFormHandler(err);
+    })
+});
+
+// SELECT A DATA
+let selectedItem = null;
+$(document.body).on('click', 'tr.todosRow', function(){
+    $('tr.todosRow').removeClass('selected');
+    $(this).addClass('selected');
+    selectedItem = $(this);
+    $('#delete').removeAttr('disabled');
+    $('#edit').removeAttr('disabled');
+});
+
+// DESELECT A DATA
+$(document.body).on('click', '.selected', function(){
+    $('tr.todosRow').removeClass('selected');
+    $('#delete').attr('disabled', true);
+    $('#edit').attr('disabled', true);
+});
+
+//  DELETE A DATA
+$('#delete').click(function(event){
+    event.preventDefault();
+    confirmDelete(selectedItem);
+});
+
+let dataId;
+//  EDIT BUTTON
+$('#edit').click(function(event){
+    event.preventDefault();
+    hideAll();
+    $('#crud-nav').show();
+    if(selectedItem){
+        const todoId = selectedItem.attr('data-todoId');
+        $('#section-edit-form').show();
         $.ajax({
-            type: 'PUT',
-            url: `http://localhost:3000/todos/${dataId}`,
-            data: dataEdited,
+            type: 'GET',
+            url: `http://localhost:3000/todos/${todoId}`,
             headers: {
                 token: localStorage.getItem('token')
             }
-        }).done( result => {
-            hideAll();
-            $('#crud-nav').show();
-            $('#todoTable').show();
-            $('#table-todos').show();
-            showAll();
-            // $('#message').show().append('Success EDIT todo, view in dashboard');
-            // showAll();
-        }).fail( err => {
-            $('#message').show().append('Eror EDIT todo');
-            console.log(err);
-        });
-    })
+        }).done( data => {
+            dataId = data.data.id;
+            const dataWillEdit = {
+                title: data.data.title,
+                description: data.data.description,
+                status: data.data.status,
+                due_date: data.data.due_date
+            };
 
+            //  assignValue
+            $('#titleedit').val(dataWillEdit.title);
+            $('#descriptionedit').val(dataWillEdit.description);
+            if(dataWillEdit.status === true){
+                $('.doneedit').attr('checked', true);
+            } else {
+                $('.not-yetedit').attr('checked', true);
+            }
+            $('#due-dateedit').val(dataWillEdit.due_date);
+        }).fail( function(err){
+            $('#message').show().append('Error EDIT todo');
+            console.log(err);
+        })
+    }
+});
+
+$('#cancel-edit').click(() => {
+    confirmEdit()
+});
+
+//  EDIT/ PUT SUBMIT
+$('#editForm').submit(( event ) => {
+    event.preventDefault();
+    let statusValue;
+    statusValue = $("input[name='status']:checked").val();
+    const dataEdited = {
+        title: $('#titleedit').val(),
+        description: $('#descriptionedit').val(),
+        status: statusValue,
+        due_date: $('#due-dateedit').val()
+    };
+    $.ajax({
+        type: 'PUT',
+        url: `http://localhost:3000/todos/${dataId}`,
+        data: dataEdited,
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    }).done( result => {
+        successFormHandler()
+    }).fail( err => {
+        catchFormHandler(err);
+    });
+});
+
+
+/*
+***
+FUNCTION SECTION
+***
+*/
 
 function showAll(){
     $('#delete').attr('disabled', true);
@@ -276,6 +312,7 @@ function showAll(){
             $('#table-todos')
             .append(`        
                 <tr id="todosRow">
+                    <th>No</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>Status</th>
@@ -286,6 +323,7 @@ function showAll(){
                 $('#table-todos')
                 .append(`
                     <tr class="todosRow" data-todoId="${todos.data[i].id}">
+                        <td>${i+1}</td>
                         <td>${todos.data[i].title}</td>
                         <td>${todos.data[i].description}</td>
                         <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
@@ -302,3 +340,117 @@ function showAll(){
 function hideAll(){
     $('.sembunyi').hide();
 };
+
+function emptyField(){
+    $('#title').val('');
+    $('#description').val('');
+    $('#due_date').val('');
+}
+
+function catchFormHandler(err){
+    if(err.status === 0){
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong in server!',
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: err.responseJSON.msg
+        });
+    }
+    console.log(err);
+}
+
+function successFormHandler(){
+    Swal.fire(
+        'Success!',
+        `Your Todo's action has been saved!`,
+        'success'
+    );
+    hideAll();
+    $('#crud-nav').show();
+    $('#todoTable').show();
+    $('#table-todos').show();
+    showAll();
+    emptyField();
+}
+
+function confirmEdit(){
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+      
+    swalWithBootstrapButtons.fire({
+        title: 'Cancel edit data?',
+        text: "Press cancel to back home!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Continue edit',
+        cancelButtonText: 'Cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.value) { }
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+            hideAll();
+            $('#crud-nav').show();
+            $('#todoTable').show();
+            $('#table-todos').show();
+            showAll();
+            emptyField();
+        }
+    });
+}
+
+function confirmDelete(selectedItem){
+    Swal.fire({
+        title: 'Are you sure to delete?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+            if(selectedItem){
+                const todoId = selectedItem.attr('data-todoId');
+                $.ajax({
+                    type: 'DELETE',
+                    url: `http://localhost:3000/todos/${todoId}`,
+                    headers: {
+                        token: localStorage.getItem('token')
+                    }
+                }).done(function(result){
+                    hideAll();
+                    $('#crud-nav').show();
+                    $('#todoTable').show();
+                    $('#table-todos').show();
+                    showAll();
+                }).fail(function(err){
+                    $('#message').show().append('Error DELETE todo');
+                })
+                $('.selected').remove();
+            }
+        }
+    })
+}
+
+function messageShow(message){
+    $('#message-data').append(`<p>${message}</p>`);
+    $('#message-data').show();
+    $('#message-data').fadeOut(5000, ()=>{
+        $('#message-data').empty();
+    });
+}

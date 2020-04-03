@@ -21,7 +21,7 @@ class UserController {
                 }, process.env.SECRET)
              });
         }).catch( err => {
-            res.status(400).json({ message: 'Error not found' });
+            res.status(400).json({ msg: err.errors[0].message });
         })
     }
     static login(req,res){

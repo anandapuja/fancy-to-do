@@ -6,9 +6,9 @@
     <title>Fancy To Do</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- <meta name="google-signin-client_id" content="232345676551-plq6kmr47fk1gvurkrp0pnj8jivr3qvt.apps.googleusercontent.com"> -->
+    <meta name="google-signin-client_id" content="599874459495-r6ao4qcllhlnh0p9t9rn7n64gjuj13lq.apps.googleusercontent.com">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="node_modules/sweetalert2/dist/sweetalert2.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -17,25 +17,22 @@
         <section id="reg-log-nav" class="btn-group sembunyi">
             <button id="register-button" class="btn btn-secondary">REGISTER</button>
             <button id="login-button" class="btn btn-secondary">LOGIN</button>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <div id="googleLogIn" class="g-signin2" data-onsuccess="onSignIn"></div>
+            <!-- <button id="googleLogOut" onclick="googleLogOut();" class="btn btn-secondary">LOGOUT</button> -->
         </section>
     </nav>
 
     <!-- IF LOGIN -->
-    <nav id="wrapMainNav" class="d-flex justify-content-center bg-dark sembunyi">
+    <nav id="wrapMainNav" class="d-flex justify-content-center bg-dark sembunyi navbar-fixed-top">
         <section id="crud-nav" class="btn-group sembunyi">
-            <!-- <button id="dashboard" class="btn btn-secondary">ALL TODOS</button> -->
             <button id="add" class="btn btn-secondary bg-dark border-0">ADD</button>
             <button id="edit" class="btn btn-secondary bg-dark border-0" >EDIT</button>
             <button id="delete" class="btn btn-secondary bg-dark border-0" >DELETE</button>
-            <button id="logout" class="btn btn-secondary bg-dark border-0">LOGOUT</button>
-            <button id="logout" class="btn btn-secondary bg-dark border-0" onclick="signOut();">GOOGLE SIGNOUT</button>
+            <button id="logout" onclick="googleLogOut();" class="btn btn-secondary bg-dark border-0">LOGOUT</button>
         </section>
     </nav>
 
-    <div id="delete-edit-message" class="col-6 sembunyi">
-
-    </div>
+    <div id="delete-edit-message" class="col-6 sembunyi"></div>
     
     <section class="row justify-content-center">
             <div class="col"></div>
@@ -54,7 +51,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">password :</span>
                         </div>
-                        <input type="text" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
                     <button type="submit" class="btn btn-info">Login</button>
                 </form>
@@ -95,17 +92,19 @@
                         <textarea class="form-control" id="description" rows="3"></textarea>
                     </div>
                     <p>Status</p>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input done" type="radio" name="status" id="status" value="true">
-                        <label class="form-check-label" for="">Done!</label>
+                    <div class="statusRadioButton">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input done" type="radio" name="status" id="status" value=true>
+                            <label class="form-check-label" for="">Done!</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input not-yet" type="radio" name="status" id="status" value=false>
+                            <label class="form-check-label" for="">Not yet!</label>
+                        </div>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input not-yet" type="radio" name="status" id="status" value="false">
-                        <label class="form-check-label" for="">Not yet!</label>
-                    </div><br><br>
                     <p>Due Date</p>
                     <input type="date" id="due-date" name="due_date"><br><br>
-                    <button type="submit" class="btn btn-info btn-add">ADD</button>
+                    <button type="submit" class="btn btn-info btn-add" id="addButton">ADD</button>
                 </form>
             </div>
 
@@ -135,15 +134,17 @@
                     <p>Due Date</p>
                     <input type="date" id="due-dateedit" name="due_date"><br><br>
                     <button type="submit" class="btn btn-info btn-edit">EDIT</button>
+                    <button type="button" class="btn btn-info btn-edit" id="cancel-edit">CANCEL</button>
                 </form>
             </div>
 
+            <!-- TABEL DATA TODOS -->
             <div id="todoTable" class="col-6 sembunyi">
                 <div class="alert alert-danger" role="alert">
-                    Do you want to take action? Simple click row and press EDIT or DELETE button above.
+                    Want to take an action? Simple! CLICK ROW & press EDIT or DELETE button above.
                 </div>
                 <h1>YOUR TO DO LIST</h1>
-                <div id="message-data" class="sembunyi"></div>
+                <div id="message-data" class="col-6 sembunyi"></div>
                 <table id="table-todos" class="table">
                     <tr id="todosRow">
                         <th>Title</th>
@@ -158,7 +159,8 @@
     </section>
 
     <!-- TABEL ALL TODOS -->
-    <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="main.js"></script>
+    <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>

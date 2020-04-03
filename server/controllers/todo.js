@@ -11,14 +11,14 @@ class TodoController {
         })
         .then( data => {
             if( data.length > 0 ){
-                res.status(200);
-                res.json({ data });
+                res.status(200).json({ data });
             } else {
-                res.status(200);
-                res.json({ data, msg: 'Data empty' });
+                res.status(200).json({ data, msg: 'Data empty' });
             }
         }).catch( err => {
-            res.status(500);
+            res.status(500).json({
+                msg: 'Internal Server Error'
+            });
         })
     }
     // POST DATA
@@ -30,17 +30,9 @@ class TodoController {
             due_date: req.body.due_date,
             UserId: req.userId
         }).then( data => {
-            if( data ){
-                res.status(201).json( data );
-            } else {
-                res.status(400).json({ msg: err.errors[0].message });
-            }
+            res.status(201).json( data );
         }).catch( err => {
-            if( err.errors[0].message ){
-                res.status(400).json({ msg: err.errors[0].message });
-            } else {
-                res.status(500).json({ msg: 'Internal server error'});
-            }
+            res.status(400).json({ msg: err.errors[0].message });
         })
     }
     // GET A DATA
@@ -81,12 +73,12 @@ class TodoController {
             }
         }).then( data => {
             if( data.length > 0 ){
-                res.status(200).json({ data: updatedData, status: 'success update' });
+                res.status(200).json({ data: updatedData, status: 'Success update' });
             } else {
                 res.status(404).json({ msg: 'Error not found'});
             }
         }).catch( err => {
-            res.status(500).json({ msg: 'Internal server error' });
+            res.status(400).json({ msg: err.errors[0].message });
         })
     }
     // DELETE DATA
