@@ -2,8 +2,6 @@
 
 Fancy To Do application is created to manage your todo list, or manage your activity.
 
-# If you a courier and want to listed your activity, we serve SHIPPING PRICE CHECKER too.
-
 This application is build using latest technology include:
 * REST API
 * ExpressJS
@@ -17,9 +15,8 @@ This application is build using latest technology include:
 * ...
 
 We are include
-# 3rd Party API
-* Cek Ongkir from RAJA ONGKIR
-* MailBoxValidator
+# 3rd PARTY API
+* MailBoxValidator. [Click here!](https://www.mailboxvalidator.com/api-single-validation)
 
 We have several endpoints here:
 # OUR ENDPOINTS
@@ -33,6 +30,7 @@ Route | Method | Req(s) | Res(s) | Description
 `/todos/:id` | DELETE | **Headers**<br>token:`String`<br>**Body**<br> not needed  | **Success**<br>`200` Deleted todo displayed<br>**Fail**<br>`404` Todo not found<br>`500` Internal Server Error | Delete a todo
 
 > Get all todos
+### GET /todos
 
 _Request Header_
 ```
@@ -77,9 +75,8 @@ _Response (400 - Bad Request)_
 }
 ```
 ---
-### POST /assets
-
-> Create new asset
+> Post new todo
+### POST /todos
 
 _Request Header_
 ```
@@ -119,6 +116,7 @@ _Response (400 - Bad Request)_
 ```
 
 ---
+> Get a todo
 ### GET /todos/:id
 
 > Get a todo by id
@@ -156,6 +154,7 @@ _Response (400 - Bad Request)_
 ```
 
 ---
+> Update a todo
 ### PUT /todos/:id
 
 > Update a todo by id
