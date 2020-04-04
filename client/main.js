@@ -27,12 +27,13 @@ function onSignIn(googleUser) {
         }
     })
     .done( data => {
+        // console.log('MASUK MAIN JS GOOGLE')
         localStorage.setItem('token', data.token);
         hideAll();
         $('#crud-nav').show();
         $('#todoTable').show();
         $('#table-todos').show();
-        // showAll();
+        showAll();
         // $('#table-todos').empty()
     })
     .fail( err => {
@@ -305,6 +306,7 @@ function signOut() {
 }
 
 function showAll(){
+    // console.log('MASUK SHOW ALL')
     $('#delete').attr('disabled', true);
     $('#edit').attr('disabled', true);
     $('#delete-edit-message').show();
@@ -329,6 +331,7 @@ function showAll(){
                 $('#title-to-do-list').append('<p class="text-light text-center">ADD NEW TODO HERE!</p>');
             // });
         } else {
+            // console.log('MASUK THEN SHOW ALL')
             $('#table-todos')
             .append(`        
                 <tr id="todosRow">
