@@ -24,20 +24,20 @@ function onSignIn(googleUser) {
         url: 'http://localhost:3000/googleSignIn',
         data: {
             token: id_token
-        },
-        statusCode: {
-            200: function(response){
-                console.log(response, '<<<<<< Berhasil dapat Token');
-                localStorage.setItem('token', response.token);
-                // successFormHandler()
-                hideAll();
-                $('#crud-nav').show();
-                $('#todoTable').show();
-                $('#table-todos').show();
-                showAll();
-            }
         }
-    });
+    })
+    .done( data => {
+        localStorage.setItem('token', data.token);
+        hideAll();
+        $('#crud-nav').show();
+        $('#todoTable').show();
+        $('#table-todos').show();
+        // showAll();
+        // $('#table-todos').empty()
+    })
+    .fail( err => {
+        console.log(err);
+    })
 }
 
 function googleLogOut(){
@@ -68,24 +68,28 @@ $('#registerForm').submit(( event ) => {
         url: 'http://localhost:3000/register',
         data
     }).done( data => {
-        const token = data.token;
-        localStorage.setItem('token', token);
-        if(!localStorage){}
-        else {
-            localStorage.setItem('token', data.token);
-            if(localStorage){
-                hideAll();
-                $('#crud-nav').show();
-                $('#todoTable').show();
-                $('#table-todos').show();
-                showAll();
-            } else {
-                $('#login').show();
-                $('#crud-nav').hide();
+        if(data === 'Email UNVERIFIED by MAILBOXVALIDATOR'){
+            console.log(data)
+        } else {
+            const token = data.token;
+            localStorage.setItem('token', token);
+            if(!localStorage){}
+            else {
+                localStorage.setItem('token', data.token);
+                if(localStorage){
+                    hideAll();
+                    $('#crud-nav').show();
+                    $('#todoTable').show();
+                    $('#table-todos').show();
+                    showAll();
+                } else {
+                    $('#login').show();
+                    $('#crud-nav').hide();
+                }
             }
         }
     }).fail((err) => {
-        messageShow(err.responseJSON.msg)
+        messageShow(err.responseJSON.msg);
         console.log(err);
     })
 });
@@ -116,6 +120,7 @@ $('#loginForm').submit(function( event ){
                 $('#crud-nav').hide();
             }
         }).fail( err => {
+            messageShow(err.responseJSON.message);
             console.log(err);
         }
     );
@@ -155,6 +160,16 @@ $('#add').click(() => {
     $('#section-add-form').show();
     $('#delete').attr('disabled', true);
     $('#edit').attr('disabled', true);
+});
+
+//  ADD NEW DATA BUTTON
+$('#title-to-do-list').click(() => {
+    hideAll();
+    $('#crud-nav').show();
+    $('#section-add-form').show();
+    $('#delete').attr('disabled', true);
+    $('#edit').attr('disabled', true);
+    $('#title-to-do-list').empty();
 });
 
 // ADD DATA SUBMIT
@@ -303,11 +318,15 @@ function showAll(){
         }
     }).done( todos => {
         if( todos.data.length === 0 ){
-            $('#message-data').append(`<p>You haven't a data, please ADD YOUR TODO first</p>`);
-            $('#message-data').show();
-            $('#message-data').fadeOut(5000, ()=>{
-                $('#message-data').empty();
-            });
+            // $('#message-data').append(`<p>You haven't a data, please ADD YOUR TODO first</p>`);
+            // $('#message-data').show();
+            // $('#message-data').fadeOut(5000, ()=>{
+            //     $('#message-data').empty();
+            // });
+            // $('#title-to-do-list').fadeIn(500, ()=>{
+                $('#title-to-do-list').show();
+                $('#title-to-do-list').append('<p class="text-light text-center">ADD NEW TODO HERE!</p>');
+            // });
         } else {
             $('#table-todos')
             .append(`        
@@ -393,7 +412,7 @@ function confirmEdit(){
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Continue edit',
-        cancelButtonText: 'Cancel!',
+        cancelButtonText: 'Yes, CANCEL!',
         reverseButtons: true
     }).then((result) => {
         if (result.value) { }
@@ -450,7 +469,7 @@ function confirmDelete(selectedItem){
 function messageShow(message){
     $('#message-data').append(`<p>${message}</p>`);
     $('#message-data').show();
-    $('#message-data').fadeOut(5000, ()=>{
+    $('#message-data').fadeOut(4000, ()=>{
         $('#message-data').empty();
     });
 }

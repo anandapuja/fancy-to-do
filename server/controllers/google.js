@@ -33,11 +33,11 @@ class GoogleController {
         })
         .then( data => {
             const user = {
-                id: data.id,
+                userId: data.id,
                 email: data.email
             };
             res.status(200).json({
-                id: data.id,
+                userId: data.id,
                 email: data.email,
                 token: jwt.sign(user, process.env.SECRET)
             })

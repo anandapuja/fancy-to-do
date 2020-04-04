@@ -3,7 +3,6 @@ const { Todo } = require('../models');
 class TodoController {
     // GET ALL DATA
     static getTodosData(req,res){
-        console.log('>>>> CONTROLLER')
         Todo.findAll({
             order: [['id', 'desc']],
             where: {

@@ -13,16 +13,13 @@
 </head>
 <body>
     <header>
-        <img src="./img/logo.png">
+        <a href="http://localhost:8080"><img src="./img/logo.png"></a>
     </header>
     <!-- IF NOT LOGIN -->
     <nav id="wrapLogNav" class="d-flex justify-content-center bg-dark sembunyi">
         <section id="reg-log-nav" class="btn-group sembunyi">
             <button id="register-button" class="btn btn-secondary">REGISTER</button>
             <button id="login-button" class="btn btn-secondary">LOGIN</button>
-            <!-- <div id="googleLogIn" class="g-signin2" data-onsuccess="onSignIn"></div> -->
-            <!-- <button id="logout" onclick="googleLogOut();" class="btn btn-secondary bg-dark border-0">LOGOUT</button> -->
-            <!-- <button id="googleLogOut" onclick="googleLogOut();" class="btn btn-secondary">LOGOUT</button> -->
         </section>
     </nav>
 
@@ -36,6 +33,7 @@
         </section>
     </nav>
 
+    <div id="message-data" class="alert alert-danger sembunyi text-center"></div>
     <div id="delete-edit-message" class="col-6 sembunyi"></div>
     
     <section class="row justify-content-center">
@@ -85,7 +83,7 @@
 
             <!-- ADD/FORM -->
             <div id="section-add-form" class="col-6 sembunyi">
-                <h1>ADD FORM</h1>
+                <h1 class="mb-4 mt-4">ADD FORM</h1>
                 <form id="addForm">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -116,7 +114,7 @@
 
             <!-- EDIT FORM -->
             <div id="section-edit-form" class="col-6 sembunyi">
-                <h1>EDIT FORM</h1>
+                <h1 class="mb-4 mt-4">EDIT FORM</h1>
                 <form id="editForm">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -140,7 +138,7 @@
                     <p>Due Date</p>
                     <input type="date" id="due-dateedit" name="due_date"><br><br>
                     <button type="submit" class="btn btn-info btn-edit">EDIT</button>
-                    <button type="button" class="btn btn-info btn-edit" id="cancel-edit">CANCEL</button>
+                    <button type="button" class="btn btn-danger btn-edit" id="cancel-edit">CANCEL</button>
                 </form>
             </div>
 
@@ -150,7 +148,7 @@
                     Want to take an action? Simple! CLICK ROW & press EDIT or DELETE button above.
                 </div>
                 <h1 class="text-center mb-4">YOUR TO DO LIST</h1>
-                <div id="message-data" class="col-6 sembunyi"></div>
+                <div id="title-to-do-list" class="btn btn-primary sembunyi text-center" style="width: 100%;"></div>
                 <table id="table-todos" class="table">
                     <tr id="todosRow">
                         <th>Title</th>
@@ -171,7 +169,8 @@
                 <a href="https://expressjs.com/" target="_blank">express,</a>
                 <a href="https://sequelize.org/" target="_blank">sequelize,</a>
                 <a href="https://jquery.com/" target="_blank">jQuery,</a>
-                <a href="https://developers.google.com/identity/sign-in/web/sign-in" target="_blank">googleSign,</a> and more ...
+                <a href="https://developers.google.com/identity/sign-in/web/sign-in" target="_blank">googleSign,</a>
+                <a href="https://www.mailboxvalidator.com/api-single-validation" target="_blank">mailboxvalidator,</a> and more ...
             </p>
         </div>
     </footer>

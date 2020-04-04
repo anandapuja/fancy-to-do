@@ -1,4 +1,5 @@
 require('dotenv').config();
+const axios = require('axios');
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const checkPass = require('../helpers/bcrypt').checkPassword;
@@ -9,30 +10,41 @@ class UserController {
             email: req.body.email,
             password: req.body.password
         }
-        User.create(newUser)
-        .then( data => {
-            console.log(data.id)
-            res.status(200).json({ 
-                id: data.id,
-                email: data.email,
-                token: jwt.sign({
-                    userId: data.id,
-                    userEmail: data.email
-                }, process.env.SECRET)
-             });
-        }).catch( err => {
-            res.status(400).json({ msg: err.errors[0].message });
+        axios({
+            method: 'POST',
+            url: `https://api.mailboxvalidator.com/v1/validation/single?key=${process.env.MAILBOX_KEY}&email=${newUser.email}`
+        }).then( result =>{
+            if(result.data.is_verified === 'True'){
+                return User.create(newUser);
+            }else {
+                return 'Email UNVERIFIED by MAILBOXVALIDATOR';
+            }
         })
+        .then( data => {
+            if(data === 'Email UNVERIFIED by MAILBOXVALIDATOR'){
+                res.status(400).json({ msg: data})
+            } else {
+                res.status(200).json({ 
+                    id: data.id,
+                    email: data.email,
+                    token: jwt.sign({
+                        userId: data.id,
+                        userEmail: data.email
+                    }, process.env.SECRET)
+                 })
+            }
+        })
+        .catch( err => {
+            res.status(400).json({ msg: err.errors[0].message });
+        });
     }
-    static login(req,res){
-        console.log(req.body, '<<DATA')
 
+    static login(req,res){
         User.findOne({
             where: {
                 email: req.body.email
             }
         }).then( data => {
-            console.log(data, '<<DATA dari SERVER')
             if(data){
                 if(checkPass(req.body.password, data.password)){
                     res.status(200).json({ 
@@ -42,14 +54,13 @@ class UserController {
                         }, process.env.SECRET)
                      });
                 } else {
-                    console.log(' MASUK ELS')
-                    res.status(400).json({ message: 'email / password invalid 1' });
+                    res.status(400).json({ message: 'Email / Password INVALID' });
                 }
             } else {
-                res.status(400).json({ message: 'email / password invalid 2' });
+                res.status(400).json({ message: 'Email / Password INVALID' });
             }
         }).catch( err => {
-            res.status(500).json({ message: 'internal server error' });
+            res.status(500).json({ message: 'Internal server error' });
         })
     }
 }
