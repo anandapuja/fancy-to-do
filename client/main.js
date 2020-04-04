@@ -77,11 +77,12 @@ $('#registerForm').submit(( event ) => {
             else {
                 localStorage.setItem('token', data.token);
                 if(localStorage){
-                    hideAll();
-                    $('#crud-nav').show();
-                    $('#todoTable').show();
-                    $('#table-todos').show();
-                    showAll();
+                    // hideAll();
+                    // $('#crud-nav').show();
+                    // $('#todoTable').show();
+                    // $('#table-todos').show();
+                    // showAll();
+                    loginSuccessHandler();
                 } else {
                     $('#login').show();
                     $('#crud-nav').hide();
@@ -114,7 +115,7 @@ $('#loginForm').submit(function( event ){
         }).done( data => {
             localStorage.setItem('token', data.token);
             if(localStorage.getItem('token')){
-                successFormHandler();
+                loginSuccessHandler();
             } else {
                 $('#login').show();
                 $('#crud-nav').hide();
@@ -387,6 +388,20 @@ function successFormHandler(){
     Swal.fire(
         'Success!',
         `Your Todo's action has been saved!`,
+        'success'
+    );
+    hideAll();
+    $('#crud-nav').show();
+    $('#todoTable').show();
+    $('#table-todos').show();
+    showAll();
+    emptyField();
+}
+
+function loginSuccessHandler(){
+    Swal.fire(
+        'Success!',
+        `Now you're logged in!`,
         'success'
     );
     hideAll();
