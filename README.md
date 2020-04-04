@@ -3,7 +3,7 @@
 Fancy To Do application is created to manage your todo list, or manage your activity.
 
 This application is build using latest technology include:
-* REST API
+* RESTful API
 * ExpressJS
 * Postgres
 * Sequelize
@@ -17,6 +17,19 @@ This application is build using latest technology include:
 We are include
 # 3rd PARTY API
 * MailBoxValidator. [Click here!](https://www.mailboxvalidator.com/api-single-validation)
+```
+{
+We using this 3rd party API to "extremly" CHECK validation of registrant email. You, that "REAL EXIST EMAIL ACCOUNT" can register in our application.
+}
+```
+
+# oAuth
+* Google Signin Integration [Click here!](https://developers.google.com/identity/sign-in/web/sign-in)
+```
+{
+You can sign in into our application using GOOGLE SIGN IN. Your data will be added into our database.
+}
+```
 
 We have several endpoints here:
 # OUR ENDPOINTS
