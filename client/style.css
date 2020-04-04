@@ -1,9 +1,9 @@
 body {
-    background-image: url('./img/bg.png');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: left bottom;
-    background-size: auto;
+    background-image: url('./img/bg.png'), url('./img/bg2.png');
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
+    background-position: left bottom, right bottom;
+    background-size: auto, auto;
 }
 .todosRow {
     background: #eee;
@@ -25,7 +25,6 @@ header {
 footer {
     margin-top: 100px;
     padding: 20px 0 10px 0;
-    background-color: #eee;
 }
 h1 {
     color: #2E3192;
