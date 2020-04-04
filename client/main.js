@@ -1,7 +1,7 @@
-
 $(document).ready(() => {
     if(localStorage.getItem('token')){
         hideAll();
+        $('#emptyTodoHere').remove();
         $('#crud-nav').show();
         $('#todoTable').show();
         $('#table-todos').show();
@@ -15,6 +15,61 @@ $(document).ready(() => {
         $('#register-section').show();
     }
 });
+
+function showAll(){
+    $('#delete').attr('disabled', true);
+    $('#edit').attr('disabled', true);
+    $('#delete-edit-message').show();
+    $('#table-todos').show();
+    $('#section-edit-form').hide();
+    $('#section-add-form').hide();
+    $('#emptyTodoHere').remove();
+    $('#table-todos').empty()
+    $.ajax({
+        url: 'http://localhost:3000/todos',
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    }).done( todos => {
+        if( todos.data.length === 0 ){
+                $('#title-to-do-list').show();
+                $('#title-to-do-list').append('<p id="emptyTodoHere" class="text-light text-center">ADD NEW TODO HERE!</p>');
+        } else {
+            $('#table-todos')
+            .append(`        
+                <tr id="todosRow">
+                    <th>No</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                </tr>
+            `);
+            for( let i = 0; i < todos.data.length; i++ ){
+                $('#table-todos')
+                .append(`
+                    <tr class="todosRow" data-todoId="${todos.data[i].id}">
+                        <td>${i+1}</td>
+                        <td>${todos.data[i].title}</td>
+                        <td>${todos.data[i].description}</td>
+                        <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
+                        <td>${todos.data[i].due_date}</td>
+                    </tr>
+                `)
+            }
+        }
+    }).fail( err => {
+        console.log(err);
+    });
+};
+
+$('#backtohome').click(() => {
+    hideAll();
+    $('#crud-nav').show();
+    $('#todoTable').show();
+    $('#table-todos').show();
+    showAll();
+})
 
 function onSignIn(googleUser) {
     console.log('user sign in via Google');
@@ -30,9 +85,14 @@ function onSignIn(googleUser) {
         localStorage.setItem('token', data.token);
         hideAll();
         $('#crud-nav').show();
+        $('#section-add-form').show();
+        $('#delete').attr('disabled', true);
+        $('#edit').attr('disabled', true);
+        hideAll();
+        $('#crud-nav').show();
         $('#todoTable').show();
         showAll();
-        $('#table-todos').show();
+        // $('#table-todos').show();
     })
     .fail( err => {
         console.log(err);
@@ -284,52 +344,6 @@ function signOut() {
     console.log('User signed out.');
     });
 }
-
-function showAll(){
-    $('#delete').attr('disabled', true);
-    $('#edit').attr('disabled', true);
-    $('#delete-edit-message').show();
-    $('#table-todos').show();
-    $('#section-edit-form').hide();
-    $('#section-add-form').hide();
-    $('#table-todos').empty()
-    $.ajax({
-        url: 'http://localhost:3000/todos',
-        headers: {
-            token: localStorage.getItem('token')
-        }
-    }).done( todos => {
-        if( todos.data.length === 0 ){
-                $('#title-to-do-list').show();
-                $('#title-to-do-list').append('<p class="text-light text-center">ADD NEW TODO HERE!</p>');
-        } else {
-            $('#table-todos')
-            .append(`        
-                <tr id="todosRow">
-                    <th>No</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Due Date</th>
-                </tr>
-            `);
-            for( let i = 0; i < todos.data.length; i++ ){
-                $('#table-todos')
-                .append(`
-                    <tr class="todosRow" data-todoId="${todos.data[i].id}">
-                        <td>${i+1}</td>
-                        <td>${todos.data[i].title}</td>
-                        <td>${todos.data[i].description}</td>
-                        <td>${todos.data[i].status == true ? 'DONE' : 'NOT YET'}</td>
-                        <td>${todos.data[i].due_date}</td>
-                    </tr>
-                `)
-            }
-        }
-    }).fail( err => {
-        console.log(err);
-    });
-};
 
 function hideAll(){
     $('.sembunyi').hide();
