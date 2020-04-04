@@ -27,14 +27,12 @@ function onSignIn(googleUser) {
         }
     })
     .done( data => {
-        // console.log('MASUK MAIN JS GOOGLE')
         localStorage.setItem('token', data.token);
         hideAll();
         $('#crud-nav').show();
         $('#todoTable').show();
-        $('#table-todos').show();
         showAll();
-        // $('#table-todos').empty()
+        $('#table-todos').show();
     })
     .fail( err => {
         console.log(err);
@@ -78,11 +76,6 @@ $('#registerForm').submit(( event ) => {
             else {
                 localStorage.setItem('token', data.token);
                 if(localStorage){
-                    // hideAll();
-                    // $('#crud-nav').show();
-                    // $('#todoTable').show();
-                    // $('#table-todos').show();
-                    // showAll();
                     loginSuccessHandler();
                 } else {
                     $('#login').show();
@@ -130,29 +123,16 @@ $('#loginForm').submit(function( event ){
 
 //LOGOUT
 $("#logout").click(() => {
-    Swal.fire({
-        title: 'Are you sure?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, logout!'
-        })
-        .then((result) => {
-            if (result.value) {
-                Swal.fire(
-                'Logged out!',
-                'Please login back.',
-                'success'
-                )
-                hideAll();
-                localStorage.removeItem('token');
-                $('#reg-log-nav').show();
-                $('#login-section').show();
-                console.log('user logout');
-            }
-        }
+    Swal.fire(
+    'Logged out!',
+    'Please login back.',
+    'success'
     );
+    hideAll();
+    localStorage.removeItem('token');
+    $('#reg-log-nav').show();
+    $('#login-section').show();
+    console.log('user logout');
 });
 
 // ADD BUTTON
@@ -306,7 +286,6 @@ function signOut() {
 }
 
 function showAll(){
-    // console.log('MASUK SHOW ALL')
     $('#delete').attr('disabled', true);
     $('#edit').attr('disabled', true);
     $('#delete-edit-message').show();
@@ -321,17 +300,9 @@ function showAll(){
         }
     }).done( todos => {
         if( todos.data.length === 0 ){
-            // $('#message-data').append(`<p>You haven't a data, please ADD YOUR TODO first</p>`);
-            // $('#message-data').show();
-            // $('#message-data').fadeOut(5000, ()=>{
-            //     $('#message-data').empty();
-            // });
-            // $('#title-to-do-list').fadeIn(500, ()=>{
                 $('#title-to-do-list').show();
                 $('#title-to-do-list').append('<p class="text-light text-center">ADD NEW TODO HERE!</p>');
-            // });
         } else {
-            // console.log('MASUK THEN SHOW ALL')
             $('#table-todos')
             .append(`        
                 <tr id="todosRow">

@@ -35,7 +35,7 @@ class UserController {
             }
         })
         .catch( err => {
-            res.status(400).json({ msg: err.errors[0].message });
+            res.status(400).json({ msg: 'Email has been registered, loggin please!' });
         });
     }
 

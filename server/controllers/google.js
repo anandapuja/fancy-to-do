@@ -7,14 +7,12 @@ const client = new OAuth2Client(process.env.GOOGLE_OAUTH_ID);
 
 class GoogleController {
     static googleSignIn(req,res,next){
-        // console.log('MASUK CONTROLLER GOOGLE 1')
         const token = req.body.token;
         const googleUser = {};
         client.verifyIdToken({
             idToken: token,
             audience: process.env.GOOGLE_OAUTH_ID
         }).then( data => {
-            // console.log('MASUK CONTROLLER GOOGLE 2')
             const payload = data.getPayload();
             googleUser['email'] = payload.email;
             googleUser['password'] = '12345';
@@ -27,11 +25,9 @@ class GoogleController {
         .then( data => {
             if( !data ){
                 //  If Not Exist in Database
-                // console.log('MASUK CONTROLLER CREATE')
                 return User.create(googleUser);
             } else {
                 // If Exist in Database
-                // console.log('MASUK CONTROLLER FIND ONE')
                 return data;
             }
         })
@@ -40,7 +36,6 @@ class GoogleController {
                 userId: data.id,
                 email: data.email
             };
-            // console.log('MASUK CONTROLLER THEN 3')
             res.status(200).json({
                 userId: data.id,
                 email: data.email,
