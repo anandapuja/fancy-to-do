@@ -5,6 +5,31 @@ body {
     background-position: left bottom, right bottom;
     background-size: auto, auto;
 }
+.ui-datepicker-calendar {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+.ui-state-default {
+    padding: 5px;
+}
+.ui-datepicker-header {
+    background: #17A1B8;
+    color: white;
+}
+.ui-datepicker-title {
+    text-align: center;
+    padding: 5px 0;
+}
+.ui-icon-circle-triangle-e {
+    float: right;
+    padding:5px;
+}
+.ui-icon-circle-triangle-w {
+    padding:5px;
+}
+.ui-datepicker {
+    background: white;
+}
 .todosRow {
     background: #eee;
     color: black;

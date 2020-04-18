@@ -1,4 +1,5 @@
 $(document).ready(() => {
+
     if(localStorage.getItem('token')){
         hideAll();
         $('#emptyTodoHere').remove();
@@ -92,7 +93,6 @@ function onSignIn(googleUser) {
         $('#crud-nav').show();
         $('#todoTable').show();
         showAll();
-        // $('#table-todos').show();
     })
     .fail( err => {
         console.log(err);
